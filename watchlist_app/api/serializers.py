@@ -1,28 +1,62 @@
 from wsgiref.validate import validator
 from rest_framework import serializers
 from tables import Description
-from watchlist_app.models import Movie
+from watchlist_app.models import StreamPlatform, WatchList
+
+
+class StreamPlatformSerializer (serializers.ModelSerializer):
+    
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
+        
+
+class WatchListSerializer(serializers.ModelSerializer):   
+                    
+    class Meta:
+        model = WatchList
+        fields = "__all__"
+       
+
 
 '''Using Model Serializers'''
 
-class MovieSerializer(serializers.ModelSerializer):
-    """fields = "__all__ is for all the fields in our Movie 
-        (ie., id, name, description, active) to be included and mapped. We can also include some and exclude some if we want."""
+# class ModelSerializer(serializers.ModelSerializer):   
+#     """fields = "__all__ is for all the fields in our Movie 
+#         (ie., id, name, description, active) to be included and mapped. We can also include some and exclude some if we want.
+#         For example if I do fields = ["id", "name", "description"], my active would be hidden.
+#         Someone can use just exclude = ["id"] for instance to hide the id. """
         
-    class Meta:
-        model = Movie
-        fields = "__all__"
         
-    def validate(self, data):
-        if (data['name']).lower() == (data['description']).lower():
-            raise serializers.ValidationError("Name and Descrption should be diferent")
-        else:
-            return data        
+#     class Meta:
+#         model = Movie
+#         fields = "__all__"
+#         fields = ["id", "name", "description"]
+#         exclude = ['id']
         
-    def validate_name(self, value):
-        if len(value) < 2:
-            raise serializers.ValidationError('Name is too short')
-        return value
+        
+#     len_name = serializers.SerializerMethodField()
+    
+    
+#     def get_len_name(self, object):
+#         """The object can access each element of our fields ["id", "name", "description", "active].
+        
+#         get_['method'] in our case it is get_len_name"""
+        
+#         return len(object.name)
+    
+    
+#     def validate(self, data):
+#         if (data['name']).lower() == (data['description']).lower():
+#             raise serializers.ValidationError("Name and Descrption should be diferent")
+#         else:
+#             return data        
+        
+        
+#     def validate_name(self, value):
+#         if len(value) < 2:
+#             raise serializers.ValidationError('Name is too short')
+#         return value
         
         
         
