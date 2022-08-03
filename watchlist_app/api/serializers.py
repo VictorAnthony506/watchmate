@@ -4,18 +4,26 @@ from tables import Description
 from watchlist_app.models import StreamPlatform, WatchList
 
 
-class StreamPlatformSerializer (serializers.ModelSerializer):
-    
-    class Meta:
-        model = StreamPlatform
-        fields = "__all__"
-        
-
 class WatchListSerializer(serializers.ModelSerializer):   
                     
     class Meta:
         model = WatchList
         fields = "__all__"
+        
+        
+class StreamPlatformSerializer (serializers.ModelSerializer):
+    watchlist = WatchListSerializer(many=True, read_only=True) # I have to use watchlist here, if i use like watch or any other name it won't show.
+    # many=True, because we want wach list to be able to have one or more movies
+    # One platform can have many movies (watchlist) but a movie can only have one platform
+    
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
+        
+    
+
+
+
        
 
 
