@@ -1,10 +1,34 @@
+from asyncio import mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
 # from rest_framework.decorators import api_view
 from rest_framework import status
-from watchlist_app.models import StreamPlatform, WatchList
-from .serializers import WatchListSerializer, StreamPlatformSerializer
+from rest_framework import generics, mixins
+from watchlist_app.models import Review, StreamPlatform, WatchList
+from .serializers import ReviewSeriaizer, WatchListSerializer, StreamPlatformSerializer
 
+
+class ReviewList(mixins.ListModelMixin,
+                 mixins.CreateModelMixin,
+                 generics.GenericAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSeriaizer
+    
+    
+    def get(self, request):
+        return self.list(request)
+    
+    def post(self, request):
+        return self.create(request)
+    
+    
+class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSeriaizer
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
 
 class StreamPlatformAv(APIView):
     
