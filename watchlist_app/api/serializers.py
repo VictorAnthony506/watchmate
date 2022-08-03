@@ -1,10 +1,18 @@
 from wsgiref.validate import validator
 from rest_framework import serializers
 from tables import Description
-from watchlist_app.models import StreamPlatform, WatchList
+from watchlist_app.models import StreamPlatform, WatchList, Review
 
 
-class WatchListSerializer(serializers.ModelSerializer):   
+class ReviewSeriaizer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Review
+        fields = "__all__"
+        
+        
+class WatchListSerializer(serializers.ModelSerializer): 
+    reviews  = ReviewSeriaizer(many=True, read_only=True) # we can read the review but can't alter/write review from this serializer
                     
     class Meta:
         model = WatchList
@@ -15,6 +23,10 @@ class StreamPlatformSerializer (serializers.ModelSerializer):
     watchlist = WatchListSerializer(many=True, read_only=True) # I have to use watchlist here, if i use like watch or any other name it won't show.
     # many=True, because we want wach list to be able to have one or more movies
     # One platform can have many movies (watchlist) but a movie can only have one platform
+    
+    # Instead of the complete watchlist we can use other API References
+    
+    
     
     class Meta:
         model = StreamPlatform
