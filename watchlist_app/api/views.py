@@ -5,29 +5,54 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics, mixins
 from watchlist_app.models import Review, StreamPlatform, WatchList
-from .serializers import ReviewSeriaizer, WatchListSerializer, StreamPlatformSerializer
+from .serializers import (ReviewSeriaizer, 
+                          WatchListSerializer, 
+                          StreamPlatformSerializer)
 
 
-class ReviewList(mixins.ListModelMixin,
-                 mixins.CreateModelMixin,
-                 generics.GenericAPIView):
+class ReviewCreate(generics.CreateAPIView):
+    serializer_class = ReviewSeriaizer
+    
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        movie = WatchList.objects.get(pk=pk)        
+        serializer.save(watchlist=movie)
+        
+
+class ReviewList(generics.ListAPIView):
+    # queryset = Review.objects.all()
+    serializer_class = ReviewSeriaizer
+    
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Review.objects.filter(watchlist=pk)
+    
+    
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSeriaizer
     
     
-    def get(self, request):
-        return self.list(request)
+# class ReviewList(mixins.ListModelMixin,
+#                  mixins.CreateModelMixin,
+#                  generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSeriaizer
     
-    def post(self, request):
-        return self.create(request)
+    
+#     def get(self, request):
+#         return self.list(request)
+    
+#     def post(self, request):
+#         return self.create(request)
     
     
-class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    queryset = Review.objects.all()
-    serializer_class = ReviewSeriaizer
+# class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSeriaizer
     
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
     
 
 class StreamPlatformAv(APIView):
