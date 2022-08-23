@@ -45,7 +45,7 @@ class Review(models.Model):
     
     
     def __str__(self):
-        return (f'{str(self.rating)} | {self.watchlist.title}')
+        return (f'{str(self.rating)} | {self.watchlist.title} | {self.review_user}')
 
 
 """First Example Model Used"""
