@@ -3,8 +3,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 from user_app.api.serializers import RegistrationSerializer
-from user_app import models
+# from user_app import models
 
 
 @api_view(['POST',])
@@ -30,9 +31,15 @@ def registration_view(request):
             data['username'] = account.username
             data['email'] = account.email
             
-            token = Token.objects.get(user=account).key
-            data['token'] = token
+            # token = Token.objects.get(user=account).key
+            # data['token'] = token
             
+            #creating tokens manually... JWT
+            refresh = RefreshToken.for_user(user=account)
+            data["token"] = {
+                              "refrsh": str(refresh),
+                              "access": str(refresh.access_token),
+                            }
         else:
             data = serializer.errors    
         
