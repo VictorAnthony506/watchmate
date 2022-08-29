@@ -12,7 +12,8 @@ class ReviewSeriaizer(serializers.ModelSerializer):
         
         
 class WatchListSerializer(serializers.ModelSerializer): 
-    reviews  = ReviewSeriaizer(many=True, read_only=True) # we can read the review but can't alter/write review from this serializer
+    # reviews  = ReviewSeriaizer(many=True, read_only=True) # we can read the review but can't alter/write review from this serializer
+    # platform = serializers.CharField(source='platform.name')
                     
     class Meta:
         model = WatchList

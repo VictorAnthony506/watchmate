@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user_app',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -141,15 +142,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    
+        'rest_framework.authentication.TokenAuthentication',
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],    
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle',
+    # ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/day',
+        'user': '7/day',
+        'review-create': "1/day",
+        'review-list': "10/day",
+        'review-detail': '2/day',        
+    }  
 }
 
 
-SIMPLE_JWT = {
-    "ROTATE_REFRESH_TOKENS": True,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-}
+# SIMPLE_JWT = {
+#     "ROTATE_REFRESH_TOKENS": True,
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+# }
