@@ -12,9 +12,9 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, Scoped
 from watchlist_app.api.throttling import ReviewListThrottle, ReviewCreateThrottle
 from watchlist_app.models import Review, StreamPlatform, WatchList
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
-from .serializers import (ReviewSeriaizer, 
-                          WatchListSerializer, 
-                          StreamPlatformSerializer)
+from .serializers import ReviewSeriaizer, WatchListSerializer, StreamPlatformSerializer
+from .pagination import WatchListPagination, WatchListLOPagination, WatchListCPagination
+
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewSeriaizer
@@ -156,14 +156,16 @@ class StreamPlatformDetailAv(APIView):
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
+    pagination_class = WatchListCPagination
+
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['title', 'platform__name']
     
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['title', 'platform__name']
     
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['avg_rating']
+    # filter_backends = [filters.OrderingFilter]
+    # ordering_fields = ['avg_rating']
     
         
 class WatchListAv(APIView):
